@@ -5,6 +5,9 @@ import cors from "cors";
 import { connect } from "mongoose";
 import connectDB from "./config/db.js";
 
+// Routes import
+import authRoutes from "./routes/authRoutes.js";
+
 // Load env vars
 dotenv.config();
 
@@ -58,6 +61,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 // Debug middleware for order routes
 
 // Routes
+app.use("/api/auth", authRoutes);
 
 // API Documentation
 
