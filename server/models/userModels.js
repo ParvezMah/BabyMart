@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema(
       enum: ["admin", "user", "deliveryman"],
       default: "user",
     },
-    addresss: [
+    addresses: [
       {
         street: {
           type: String,
