@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = mongoose.Schema(
   {
@@ -57,6 +58,40 @@ const userSchema = mongoose.Schema(
     timestamps: true,
   },
 );
+
+
+
+
+// Match user entered passoword to hased password in database
+userSchema.methods.matchPassword = async function (enteredPassword){
+  return await bcrypt.compare(enteredPassword, this.password);
+}
+
+// Encrypt password using bcrypt
+userSchema.pre("save", async function (next){
+  if(!this.isModified("password")){
+    next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+
+// Ensure Default Address
+userSchema.pre("save", async function (next){
+  if(this.isModified("addresses")){
+    const defaultAddress = this.addresses.find((addr=> addr.isDefault));
+
+    if(defaultAddress){
+      this.addresses.forEach((addr)=> {
+        if(addr !== defaultAddress) addr.isDefault = false;
+      })
+    }
+  }
+  next();
+});
+
+
 
 const User = mongoose.model("user", userSchema);
 export default User;
