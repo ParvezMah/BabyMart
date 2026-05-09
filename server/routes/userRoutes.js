@@ -1,11 +1,14 @@
 import express from "express";
 import { admin, protect } from "../middleware/authMiddleware.js";
-import { getUsers } from "../controllers/userController.js";
+import { createUser, getUsers } from "../controllers/userController.js";
 
 const router = express.Router();
 
 // route
-router.route("/").get(protect,admin,getUsers)
+router
+    .route("/")
+    .get(protect,admin,getUsers)
+    .post(protect, admin, createUser);
 
 // /:id 
 // /:id/addresses
