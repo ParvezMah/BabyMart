@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 
 // Routes import
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js"
 
 import swaggerUi from "swagger-ui-express";
 import { specs } from "./config/swagger.js";
@@ -65,6 +66,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 // API Documentation
 app.use(
