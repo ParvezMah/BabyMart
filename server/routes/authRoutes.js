@@ -1,5 +1,6 @@
 import express from "express";
-import { loginUser, registerUser } from "../controllers/authController.js";
+import { loginUser, logoutUser, registerUser } from "../controllers/authController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -103,5 +104,8 @@ router.post("/register", registerUser);
  *               $ref: "#/components/schemas/Error"
  */
 router.post("/login", loginUser);
+
+// profile
+router.get("/profile", protect);
 
 export default router;
