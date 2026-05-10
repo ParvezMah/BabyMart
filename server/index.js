@@ -12,7 +12,7 @@ import productRoutes from "./routes/productRoutes.js"
 import brandRoutes from "./routes/brandRoutes.js"
 import categoryRoutes from "./routes/categoryRoutes.js"
 import bannerRoutes from "./routes/bannerRoutes.js"
-import stateRoutes from "./routes/stateRoutes.js"
+import statsRoutes from "./routes/statsRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
 import wishlistRoutes from "./routes/wishlistRoutes.js"
 import cartRoutes from "./routes/cartRoutes.js"
@@ -84,7 +84,7 @@ app.use("/api/brands", brandRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/banners", bannerRoutes);
 app.use("/api/banners", bannerRoutes);
-app.use("/api/stats", stateRoutes);
+app.use("/api/stats", statsRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRoutes);

@@ -97,4 +97,4 @@ const getStats = asyncHandler(async (req, res) => {
 
 });
 
-export default getStats;
+export { getStats };
