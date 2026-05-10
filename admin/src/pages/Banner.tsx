@@ -46,6 +46,7 @@ import { toast } from "sonner";
 import ImageUpload from "@/components/ui/image.upload";
 import { bannerSchema } from "@/lib/validation";
 import type { Banner } from "@/lib/type";
+import BannerSkeleton from "@/components/skeletons/BannerSkeleton";
 
 // Define the Banner type based on the Banner model
 
@@ -53,7 +54,7 @@ type FormData = z.infer<typeof bannerSchema>;
 
 export default function BannersPage() {
   const [banners, setBanners] = useState<Banner[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -88,6 +89,7 @@ export default function BannersPage() {
   });
 
   const fetchBanners = async () => {
+    setLoading(true);
     try {
       const response = await axiosPrivate.get("/banners");
       setBanners(response.data);
@@ -211,9 +213,7 @@ export default function BannersPage() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center min-h-[400px]">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
+        <BannerSkeleton isAdmin={isAdmin} />
       ) : (
         <div className="rounded-md border">
           <Table>

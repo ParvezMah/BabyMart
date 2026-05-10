@@ -81,7 +81,7 @@ const Dashboard = () => {
   console.log("Dashboard stats: ", stats);
 
   return (
-    <div className="bg-gradient-to-br min-h-screen from-gray-50 to-gray-100">
+    <div className="">
       {loading ? (
         <DashboardSkeleton />
       ) : (

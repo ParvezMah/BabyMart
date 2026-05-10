@@ -1,3 +1,4 @@
+import BrandSkeleton from "@/components/skeletons/BrandSkeleton";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -57,6 +58,7 @@ const Brands = () => {
   });
 
   const fetchBrands = async () => {
+    setLoading(true);
     try {
       const response = await axiosPrivate.get("/brands");
       setBrands(response.data);
@@ -174,9 +176,7 @@ const Brands = () => {
 
       {/* Brand Table */}
       {loading ? (
-        <div className="flex justify-center items-center min-h-[400px]">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
+        <BrandSkeleton isAdmin={isAdmin}/>
       ) : (
         <div>
           <Table>

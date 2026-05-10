@@ -53,6 +53,7 @@ import type z from "zod";
 import ImageUpload from "@/components/ui/image.upload";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import CategorySkeleton from "@/components/skeletons/CategorySkeleton";
 
 type FormData = z.infer<typeof categorySchema>;
 
@@ -275,9 +276,7 @@ const Categories = () => {
         </div>
       </div>
       {loading ? (
-        <div className="flex justify-center items-center min-h-[400px]">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
+        <CategorySkeleton isAdmin={isAdmin} />
       ) : (
         <>
           <div className="rounded-md border">
