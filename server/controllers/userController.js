@@ -115,7 +115,65 @@ const deleteUserById = asyncHandler(async (req, res)=>{
         res.status(404);
         throw new Error("User not found");
     }
-})
+});
+
+// addAddress
+const addAddress = asyncHandler(async (req, res)=>{
+    const user = await User.findById(req.params.id);
+
+    if(!user){
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    if (
+        user._id.toString() !== req.user._id.toString() &&
+        req.user.role !== "admin"
+    ){
+        res.status(403);
+        throw new Error("Not authorized to modify this user's addresses");
+    }
+
+    const { street, city, country, postalCode, isDefault } = req.body;
+
+    if(!street || !city || !country || !postalCode){
+        res.status(400);
+        throw new Error("All addresses fields are required");
+    }
+
+    // if this is set as default, make other addresses non-default
+    if(isDefault){
+        user.addresses.forEach((address)=>{
+            address.isDefault = false;
+        });
+    };
+
+    if(user.addresses.length === 0 ){
+        user.addresses.push({
+            street,
+            city,
+            country,
+            postalCode,
+            isDefault: true,
+        });
+    } else {
+        user.addresses.push({
+            street,
+            city,
+            country,
+            postalCode,
+            isDefault: isDefault || false,
+        })
+    }
+
+    await user.save();
+
+    res.json({
+        success: true,
+        addresses: user.addresses,
+        message: "Address added successfully",
+    });
+});
 
 export {
     getUsers,
@@ -123,4 +181,5 @@ export {
     getUserById,
     updateUserById,
     deleteUserById,
+    addAddress,
 }

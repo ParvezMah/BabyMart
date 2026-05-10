@@ -1,6 +1,6 @@
 import express from "express";
 import { admin, protect } from "../middleware/authMiddleware.js";
-import { createUser, deleteUserById, getUserById, getUsers, updateUserById } from "../controllers/userController.js";
+import { addAddress, createUser, deleteUserById, getUserById, getUsers, updateUserById } from "../controllers/userController.js";
 
 const router = express.Router();
 
@@ -19,6 +19,11 @@ router
 
 
 // /:id/addresses
+router
+    .route("/:id/addresses")
+    .post(protect, addAddress);
+
+
 // /:id/addresses/:addressesId
 
 
