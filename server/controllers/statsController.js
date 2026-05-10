@@ -36,7 +36,7 @@ const getStats = asyncHandler(async (req, res) => {
                 from: "categories",
                 localField: "category",
                 foreignField: "_id",
-                as: "category",
+                as: "categoryInfo",
             }
         },
         {
@@ -73,16 +73,16 @@ const getStats = asyncHandler(async (req, res) => {
 
     res.json({
         counts: {
-            user: usersCount,
-            product: productCount,
-            category: categoriesCount,
-            brand: brandsCount,
-            order: ordersCount,
+            users: usersCount,
+            products: productCount,
+            categories: categoriesCount,
+            brands: brandsCount,
+            orders: ordersCount,
             totalRevenue: totalRevenue,
         },
         roles: roles.map((role)=> ({
             name: role._id,
-            count: role.count,
+            value: role.count,
         })),
         categories: categoryData.map((category) => ({
             name: category._id,
@@ -97,4 +97,4 @@ const getStats = asyncHandler(async (req, res) => {
 
 });
 
-export default getStats;
+export { getStats };
