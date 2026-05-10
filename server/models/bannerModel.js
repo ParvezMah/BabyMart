@@ -13,7 +13,7 @@ const bannerSchema = new mongoose.Schema(
             required: true,
         },
         startFrom: {
-            type: Number,
+            type: Date,
             required: true,
         },
         image: {
