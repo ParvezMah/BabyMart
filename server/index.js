@@ -14,6 +14,10 @@ import categoryRoutes from "./routes/categoryRoutes.js"
 import bannerRoutes from "./routes/bannerRoutes.js"
 import stateRoutes from "./routes/stateRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
+import wishlistRoutes from "./routes/wishlistRoutes.js"
+import cartRoutes from "./routes/cartRoutes.js"
+import analyticsRoutes from "./routes/analyticsRoutes.js"
+import paymentRoutes from "./routes/paymentRoutes.js"
 
 
 import swaggerUi from "swagger-ui-express";
@@ -81,6 +85,10 @@ app.use("/api/banners", bannerRoutes);
 app.use("/api/banners", bannerRoutes);
 app.use("/api/stats", stateRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/payment", paymentRoutes);
 
 
 // API Documentation
