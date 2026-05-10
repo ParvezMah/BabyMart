@@ -34,7 +34,7 @@ const createApiInstance = (): AxiosInstance => {
       "Content-Type": "application/json",
     },
     withCredentials: true,
-    timeout: 60000, // 60 seconds timeout
+    timeout: 90000, // 90 seconds timeout
   });
 
   //   Add request interceptor to include auth token
