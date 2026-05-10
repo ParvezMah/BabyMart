@@ -2,9 +2,15 @@ import { Outlet } from "react-router";
 
 function App() {
   return (
-    <div>
-      <h1>Admin Panel</h1>
-      <Outlet/>
+    <div className="">
+      <Sidebar/>
+      <div>
+        <Header/>
+        <main>
+          <Outlet/>
+        </main>
+      </div>
+      <Toaster/>
     </div>
   );
 }
