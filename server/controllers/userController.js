@@ -175,6 +175,96 @@ const addAddress = asyncHandler(async (req, res)=>{
     });
 });
 
+// updateAddress
+const updateAddress= asyncHandler(async (req, res)=>{
+    const user = await User.findById(req.params.id);
+
+    if(!user){
+        res.status(404);
+        throw new Error("User not found");
+    };
+
+    if (
+        user._id.toString() !== req.user._id.toString() &&
+        req.user.role !== "admin"
+    ){
+        res.status(403);
+        throw new Error("Not authorized to modify this user's addresses");
+    };
+
+    const address = user.addresses.id(req.params.addressId);
+
+    if(!address){
+        res.status(404);
+        throw new Error("Address not found");
+    };
+
+    const { street, city, country, postalCode, isDefault } = req.body;
+
+    if (street) address.street = street;
+    if (city) address.city = city;
+    if (country) address.country = country;
+    if (postalCode) address.postalCode = postalCode;
+
+    // if this is set as default, make other addresses non-default
+    if(isDefault){
+        user.addresses.forEach((address)=>{
+            address.isDefault = false;
+        });
+        address.isDefault = true;
+    };
+
+
+    await user.save();
+
+    res.json({
+        success: true,
+        addresses: user.addresses,
+        message: "Address updated successfully",
+    });
+});
+
+
+// deleteAddress
+const deleteAddress= asyncHandler(async (req, res)=>{
+    const user = await User.findById(req.params.id);
+
+    if(!user){
+        res.status(404);
+        throw new Error("User not found");
+    };
+
+    if (
+        user._id.toString() !== req.user._id.toString() &&
+        req.user.role !== "admin"
+    ){
+        res.status(403);
+        throw new Error("Not authorized to modify this user's addresses");
+    };
+    
+    const address = user.addresses.id(req.params.addressId);
+
+    if(!address){
+        res.status(404);
+        throw new Error("Address not found");
+    };
+
+    const wasDefault = address.isDefault;
+    user.addresses.pull(req.params.addressId);
+
+    if(wasDefault && user.addresses.lenght > 0 ){
+        use.addresses[0].isDefault = true;
+    }
+
+    await user.save();
+
+    res.json({
+        success: true,
+        addresses: user.addresses,
+        message: "Address deleted successfully",
+    })
+});
+
 export {
     getUsers,
     createUser,
@@ -182,4 +272,6 @@ export {
     updateUserById,
     deleteUserById,
     addAddress,
+    updateAddress,
+    deleteAddress,
 }
