@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
 import Order from "../models/orderModel.js";
-import User from "../models/userModel.js";
+import User from "../models/userModels.js";
 import mongoose from "mongoose";
 
 // @desc    Get analytics overview
