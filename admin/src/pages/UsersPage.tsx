@@ -72,9 +72,9 @@ const UsersPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
-  const [perPage] = useState(20);
-  const [totalPages, setTotalPages] = useState(1);
+  // const [page, setPage] = useState(1);
+  // const [perPage] = useState(20);
+  // const [totalPages, setTotalPages] = useState(1);
 
   const axiosPrivate = useAxiosPrivate();
   const { checkIsAdmin } = useAuthStore();
