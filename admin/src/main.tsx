@@ -6,7 +6,7 @@ import Login from './pages/Login.tsx';
 import Register from './pages/Register.tsx';
 import Dashboard from './pages/Dashboard.tsx';
 import Account from './pages/Account.tsx';
-import Users from './pages/User.tsx';
+import UsersPage from './pages/UsersPage.tsx';
 import Orders from './pages/Order.tsx';
 import Invoices from './pages/Invoice.tsx';
 import Products from './pages/Product.tsx';
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard/users",
-        element: <Users />,
+        element: <UsersPage />,
       },
       {
         path: "/dashboard/orders",
