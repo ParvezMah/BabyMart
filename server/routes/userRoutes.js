@@ -1,6 +1,6 @@
 import express from "express";
 import { admin, protect } from "../middleware/authMiddleware.js";
-import { createUser, getUserById, getUsers, updateUserById } from "../controllers/userController.js";
+import { createUser, deleteUserById, getUserById, getUsers, updateUserById } from "../controllers/userController.js";
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router
     .route("/:id")
     .get(protect, getUserById)
     .put(protect, updateUserById)
-    // .delete(protect, admin, deleteUserById);
+    .delete(protect, admin, deleteUserById);
 
 
 // /:id/addresses

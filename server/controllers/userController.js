@@ -96,9 +96,31 @@ const updateUserById = asyncHandler(async (req, res)=>{
 
 });
 
+// deleteUserById
+const deleteUserById = asyncHandler(async (req, res)=>{
+    const user = await User.findById(req.params.id);
+
+
+    if(user){
+        // Delete user's cart
+        // Delete user's order (if extists)
+        // Delete user
+        await user.deleteOne();
+        res.status(200).json({
+            success: true,
+            message: "User deleted successfully"
+        })
+    }
+    else {
+        res.status(404);
+        throw new Error("User not found");
+    }
+})
+
 export {
     getUsers,
     createUser,
     getUserById,
     updateUserById,
+    deleteUserById,
 }
