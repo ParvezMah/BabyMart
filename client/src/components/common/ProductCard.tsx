@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Product } from "../../../type";
 import DiscountBadge from "./DiscountBadge";
 import PriceContainer from "./PriceContainer";
-// import AddToCartButton from "./AddToCartButton";
+import AddToCartButton from "./AddToCartButton";
+import Image from "next/image";
 
 const ProductCard = ({ product }: { product: Product }) => {
   return (
@@ -13,13 +13,19 @@ const ProductCard = ({ product }: { product: Product }) => {
         href={`/product/${product?._id}`}
         className="p-2 overflow-hidden relative block"
       >
-        <Image
-          src={product?.image}
-          alt="productImage"
-          width={500}
-          height={500}
-          className="w-full h-32 object-cover group-hover:scale-110 hoverEffect"
-        />
+        {product?.image ? (
+          <Image
+            src={product?.image}
+            alt="productImage"
+            width={500}
+            height={500}
+            className="w-full h-32 object-cover group-hover:scale-110 hoverEffect"
+          />
+        ) : (
+          <div className="w-full h-32 bg-gray-200 flex items-center justify-center">
+            No Image
+          </div>
+        )}
         <DiscountBadge
           discountPercentage={product?.discountPercentage}
           className="absolute top-4 left-2"
@@ -36,7 +42,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           price={product?.price}
           discountPercentage={product?.discountPercentage}
         />
-        {/* <AddToCartButton product={product} /> */}
+        <AddToCartButton product={product} />
       </div>
     </div>
   );

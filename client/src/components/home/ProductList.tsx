@@ -1,6 +1,6 @@
 import { fetchData } from "@/lib/api";
 import React from "react";
-// import ProductCard from "../common/ProductCard";
+import ProductCard from "../common/ProductCard";
 import { Product } from "../../../type";
 interface ProductsResponse {
   products: Product[];
@@ -24,14 +24,11 @@ const ProductList = async () => {
     );
   }
 
-  console.log("Products", products);
-
   return (
     <div className="w-full bg-babyshopWhite border mt-3 rounded-md">
       <div className="w-full p-5 grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         {products?.map((product) => (
-        //   <ProductCard key={product?._id} product={product} />
-            <p key={product._id}>ProductCard</p>
+          <ProductCard key={product?._id} product={product} />
         ))}
       </div>
     </div>
