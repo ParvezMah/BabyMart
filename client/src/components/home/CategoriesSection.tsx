@@ -28,6 +28,8 @@ const CategoriesSection = async () => {
     (category) => category.categoryType === "Hot Categories"
   );
 
+  console.log("categories", categories);
+
   return (
     <div className="hidden md:inline-flex flex-col bg-babyshopWhite h-full p-5 border rounded-md">
       {/* Featured Categories Section */}
@@ -62,7 +64,7 @@ const CategoriesSection = async () => {
 
 
       {/* Hot Categories Section */}
-      {/* <p className="font-semibold text-lg mb-3">Hot Categories</p>
+      <p className="font-semibold text-lg mb-3">Hot Categories</p>
       <div>
         {hotCategories.length > 0 ? (
           hotCategories.map((item) => (
@@ -87,10 +89,10 @@ const CategoriesSection = async () => {
         ) : (
           <p className="text-gray-500">No hot categories available</p>
         )}
-      </div> */}
+      </div>
 
       {/* Quick Links Section */}
-      {/* <div className="mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-6 pt-6 border-t border-gray-200">
         <p className="font-semibold text-lg mb-3">Quick Links</p>
         <div className="space-y-2">
           <Link
@@ -122,10 +124,10 @@ const CategoriesSection = async () => {
             <p>My Orders</p>
           </Link>
         </div>
-      </div> */}
+      </div>
 
       {/* Customer Support Section */}
-      {/* <div className="mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-6 pt-6 border-t border-gray-200">
         <p className="font-semibold text-lg mb-3">Customer Support</p>
         <div className="space-y-2">
           <Link
@@ -157,10 +159,10 @@ const CategoriesSection = async () => {
             <p>Contact Us</p>
           </Link>
         </div>
-      </div> */}
+      </div>
 
       {/* Special Offers Section */}
-      {/* <div className="mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-6 pt-6 border-t border-gray-200">
         <p className="font-semibold text-lg mb-3">Special Offers</p>
         <div className="bg-gradient-to-r from-babyshopSky/10 to-babyshopSky/5 p-3 rounded-md">
           <div className="flex items-center gap-2 mb-2">
@@ -175,10 +177,10 @@ const CategoriesSection = async () => {
             Shop Now →
           </Link>
         </div>
-      </div> */}
+      </div>
 
       {/* Age Groups Section */}
-      {/* <div className="mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-6 pt-6 border-t border-gray-200">
         <p className="font-semibold text-lg mb-3">Shop by Age</p>
         <div className="grid grid-cols-2 gap-2">
           <Link
@@ -210,7 +212,7 @@ const CategoriesSection = async () => {
             <p>2+ Years</p>
           </Link>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

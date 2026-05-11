@@ -6,6 +6,14 @@ interface ApiConfig {
 /**
  * Get API configuration based on environment
  */
+const normalizeBaseUrl = (baseUrl: string): string => {
+  const trimmed = baseUrl.trim().replace(/\/+$/, "");
+  if (trimmed.endsWith("/api")) {
+    return trimmed;
+  }
+  return `${trimmed}/api`;
+};
+
 export const getApiConfig = (): ApiConfig => {
   // Check if we're in browser or server environment
   const isClient = typeof window !== "undefined";
@@ -25,7 +33,7 @@ export const getApiConfig = (): ApiConfig => {
     process.env.NEXT_PUBLIC_APP_ENV === "production";
 
   return {
-    baseUrl,
+    baseUrl: normalizeBaseUrl(baseUrl),
     isProduction,
   };
 };
