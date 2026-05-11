@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Header from "@/components/common/Header";
 
 export const metadata: Metadata = {
   title: "Babyshop | Online shopping places",
