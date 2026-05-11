@@ -28,8 +28,6 @@ const CategoriesSection = async () => {
     (category) => category.categoryType === "Hot Categories"
   );
 
-  console.log("categories", categories);
-
   return (
     <div className="hidden md:inline-flex flex-col bg-babyshopWhite h-full p-5 border rounded-md">
       {/* Featured Categories Section */}

@@ -1,6 +1,7 @@
 import Container from "@/components/common/Container";
 import Banner from "@/components/home/Banner";
 import CategoriesSection from "@/components/home/CategoriesSection";
+import ProductList from "@/components/home/ProductList";
 
 export default async function Home() {
 
@@ -10,8 +11,8 @@ export default async function Home() {
         <CategoriesSection />
         <div className="flex-1">
           <Banner />
-          {/* <ProductList />
-          <HomeBrand brands={brands} />
+          <ProductList />
+          {/* <HomeBrand brands={brands} />
           <BabyTravelSection />
           <ComfyApparelSection />
           <FeaturedServicesSection /> */}

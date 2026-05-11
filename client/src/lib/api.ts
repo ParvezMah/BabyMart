@@ -1,4 +1,4 @@
-import { fetchWithConfig } from "./config";
+import { fetchWithConfig } from "../lib/config";
 
 export const fetchData = fetchWithConfig;
 
@@ -7,4 +7,7 @@ export const fetchData = fetchWithConfig;
 export {
   fetchWithConfig,
   getApiConfig,
-} from "./config";
+  getAuthHeaders,
+  buildQueryString,
+  API_ENDPOINTS,
+} from "../lib/config";

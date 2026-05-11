@@ -20,7 +20,6 @@ const Banner = async () => {
     return null;
   }
 
-  console.log("banners", banners);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-0">
