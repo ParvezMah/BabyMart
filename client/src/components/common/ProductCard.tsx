@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { Product } from "../../../type";
 import DiscountBadge from "./DiscountBadge";
-// import PriceContainer from "./PriceContainer";
+import PriceContainer from "./PriceContainer";
 // import AddToCartButton from "./AddToCartButton";
 
 const ProductCard = ({ product }: { product: Product }) => {
@@ -32,10 +32,10 @@ const ProductCard = ({ product }: { product: Product }) => {
           {product?.category?.name}
         </p>
         <p className="line-clamp-2 text-sm h-10">{product?.name}</p>
-        {/* <PriceContainer
+        <PriceContainer
           price={product?.price}
           discountPercentage={product?.discountPercentage}
-        /> */}
+        />
         {/* <AddToCartButton product={product} /> */}
       </div>
     </div>
