@@ -3,7 +3,6 @@ import BackToHome from "@/components/common/BackToHome";
 import Container from "@/components/common/Container";
 import DiscountBadge from "@/components/common/DiscountBadge";
 import ProductActions from "@/components/common/pages/product/ProductActions";
-// import ProductDescription from "@/components/common/pages/product/ProductDescription";
 import PriceFormatter from "@/components/common/PriceFormatter";
 import { Button } from "@/components/ui/button";
 import { fetchData } from "@/lib/api";
@@ -11,6 +10,7 @@ import { Box, Eye, FileQuestion, Share2, Star, Truck } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { Product } from "../../../../type";
+import ProductDescription from "@/components/common/pages/product/ProductDescription";
 
 const SingleProductPage = async ({
   params,
@@ -128,7 +128,7 @@ const SingleProductPage = async ({
           </div>
         </div>
         <div className="max-w-screen-xl bg-babyshopWhite shadow-babyshopBlack/10 shadow-sm border border-babyshopTextLight/30 rounded-xl p-5 md:p-10 mt-5">
-          {/* <ProductDescription product={product} /> */}
+          <ProductDescription product={product} />
         </div>
       </Container>
     </div>
