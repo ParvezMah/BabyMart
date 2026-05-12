@@ -5,6 +5,7 @@ import HomeBrand from "@/components/home/HomeBrand";
 import ProductList from "@/components/home/ProductList";
 import { Brand } from "../../type";
 import { fetchData } from "@/lib/api";
+import BabyTravelSection from "@/components/home/BabyTravelSection";
 
 export default async function Home() {
   const brands = await fetchData<Brand[]>("/brands");
@@ -16,8 +17,8 @@ export default async function Home() {
           <Banner />
           <ProductList />
           <HomeBrand brands={brands} />
-        {/* <BabyTravelSection />
-          <ComfyApparelSection />
+          <BabyTravelSection />
+          {/* <ComfyApparelSection />
           <FeaturedServicesSection /> */}
         </div>
       </Container>
