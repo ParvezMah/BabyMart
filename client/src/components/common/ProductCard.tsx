@@ -1,0 +1,51 @@
+import Link from "next/link";
+import React from "react";
+import { Product } from "../../../type";
+import DiscountBadge from "./DiscountBadge";
+import PriceContainer from "./PriceContainer";
+import AddToCartButton from "./AddToCartButton";
+import Image from "next/image";
+
+const ProductCard = ({ product }: { product: Product }) => {
+  return (
+    <div className="border rounded-md group overflow-hidden w-full relative">
+      <Link
+        href={`/product/${product?._id}`}
+        className="p-2 overflow-hidden relative block"
+      >
+        {product?.image ? (
+          <Image
+            src={product?.image}
+            alt="productImage"
+            width={500}
+            height={500}
+            className="w-full h-32 object-cover group-hover:scale-110 hoverEffect"
+          />
+        ) : (
+          <div className="w-full h-32 bg-gray-200 flex items-center justify-center">
+            No Image
+          </div>
+        )}
+        <DiscountBadge
+          discountPercentage={product?.discountPercentage}
+          className="absolute top-4 left-2"
+        />
+      </Link>
+      {/* Wishlist button */}
+      <hr />
+      <div className="px-4 py-2 space-y-1">
+        <p className="uppercase text-xs font-medium text-babyshopTextLight">
+          {product?.category?.name}
+        </p>
+        <p className="line-clamp-2 text-sm h-10">{product?.name}</p>
+        <PriceContainer
+          price={product?.price}
+          discountPercentage={product?.discountPercentage}
+        />
+        <AddToCartButton product={product} />
+      </div>
+    </div>
+  );
+};
+
+export default ProductCard;
