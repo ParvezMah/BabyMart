@@ -7,8 +7,6 @@ import React from "react";
 
 const UserButton = () => {
   const { isAuthenticated, authUser } = useUserStore();
-  console.log("isAuthenticated : ", isAuthenticated);
-  console.log("authUser : ", authUser);
 
   return (
     <Link
