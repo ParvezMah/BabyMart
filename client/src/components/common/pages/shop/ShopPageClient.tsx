@@ -2,7 +2,7 @@
 import Container from "@/components/common/Container";
 // import EmptyListDesign from "@/components/common/pages/product/EmptyListDesign";
 import ProductCard from "@/components/common/ProductCard";
-// import ShopSkeleton from "@/components/skeleton/ShopSkeleton";
+import ShopSkeleton from "@/components/skeletons/ShopSkeleton";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -438,8 +438,7 @@ const ShopPageClient = ({ categories, brands }: Props) => {
         </div>
         <div className="bg-babyshopWhite p-5 rounded-md w-full border">
           {loading ? (
-            // <ShopSkeleton />
-            <h1>ShopSkeleton</h1>
+            <ShopSkeleton />
           ) : products?.length > 0 ? (
             <div className="w-full">
               <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3">
