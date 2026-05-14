@@ -316,7 +316,7 @@ const CartPageClient = () => {
                           </div>
                         </div>
 
-                        {/* Subtotal and Remove */}
+                        {/* Subtotal and Remove */} 
                         <div className="flex items-center justify-between">
                           <div>
                             <span className="text-xs text-gray-500 block">
