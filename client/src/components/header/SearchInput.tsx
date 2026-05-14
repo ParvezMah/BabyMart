@@ -93,8 +93,6 @@ const SearchInput = () => {
     }
   };
 
-  console.log('products:', products);
-  console.log('SetShowResults:', showResults);
 
   return (
     <div ref={searchRef} className="relative lg:w-full">
