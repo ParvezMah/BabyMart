@@ -1,17 +1,13 @@
 "use client";
 import { useCartStore, useUserStore } from "@/lib/store";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
-// import { Skeleton } from "../ui/skeleton";
-// import CartSkeleton from "../skeleton/CartSkeleton";
 import { ArrowLeft, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "../../../../components/ui/button";
-// import PageBreadcrumb from "../common/PageBreadcrumb";
+import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
 import Image from "next/image";
-import PriceFormatter from "../../../common/PriceFormatter";
-import { Separator } from "../../../../components/ui/separator";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -20,9 +16,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
 } from "../../../../components/ui/alert-dialog";
-import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
-import CartSkeleton from "./CartSkeleton";
+import { Separator } from "../../../../components/ui/separator";
+import PriceFormatter from "../../../common/PriceFormatter";
 import Container from "../../Container";
+import CartSkeleton from "./CartSkeleton";
+import PageBreadcrumb from "../../PageBreadcrumb";
 
 const CartPageClient = () => {
   const {
@@ -202,7 +200,7 @@ const CartPageClient = () => {
   return (
     <Container className="py-8">
       {/* breadcrumb */}
-      {/* <PageBreadcrumb
+      <PageBreadcrumb
         items={[]}
         currentPage="Cart"
         showSocialShare={true}
@@ -213,8 +211,7 @@ const CartPageClient = () => {
           } from Babyshop`,
           url: typeof window !== "undefined" ? window.location.href : "",
         }}
-      /> */}
-      <h1>PageBreadcrumb</h1>
+      />
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-babyshopBlack mb-2">Cart</h1>
       </div>
