@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import AddressSelection from "./AddressSelection";
 import { Address } from "../../../type";
-// import CheckoutSkeleton from "../skeletons/CheckoutSkeleton";
+import CheckoutSkeleton from "../skeletons/CheckoutSkeleton";
 
 const CheckoutPageClient = () => {
   const [order, setOrder] = useState<Order | null>(null);
@@ -193,8 +193,7 @@ const CheckoutPageClient = () => {
   const handleStripeCheckout = async () => {};
 
   if (loading || authLoading) {
-    // return <CheckoutSkeleton />;
-    return <h1>Checkout Skeleton</h1>
+    return <CheckoutSkeleton />;
   }
 
   if (!order) {
