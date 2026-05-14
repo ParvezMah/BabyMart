@@ -259,6 +259,8 @@ const ShopPageClient = ({ categories, brands }: Props) => {
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700 border border-blue-200">
                     `&quot;`{search}`&quot;`
                     <button
+                      type="button"
+                      title="x-btn"
                       onClick={resetSearch}
                       className="ml-2 text-blue-500 hover:text-blue-700"
                       disabled={loading}

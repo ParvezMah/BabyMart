@@ -20,9 +20,6 @@ const ShopPage = async () => {
     console.log("error", error);
   }
 
-  console.log("categories", categories);
-  console.log("brands", brands);
-
 
   return <ShopPageClient categories={categories} brands={brands} />;
 };
