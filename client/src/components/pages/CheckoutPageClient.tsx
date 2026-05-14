@@ -12,7 +12,7 @@ import PageBreadcrumb from "../common/PageBreadcrumb";
 import PriceFormatter from "../common/PriceFormatter";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-// import AddressSelection from "./AddressSelection";
+import AddressSelection from "./AddressSelection";
 import { Address } from "../../../type";
 // import CheckoutSkeleton from "../skeletons/CheckoutSkeleton";
 
@@ -230,13 +230,13 @@ const CheckoutPageClient = () => {
         {/* Order details */}
         <div className="lg:col-span-2 space-y-6">
           {/* Addresss */}
-{/* 
+
           <AddressSelection
             selectedAddress={selectedAddress}
             onAddressSelect={setSelectedAddress}
             addresses={addresses}
             onAddressesUpdate={handleAddressesUpdate}
-          /> */}
+          />
           {/* Order items */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-6">

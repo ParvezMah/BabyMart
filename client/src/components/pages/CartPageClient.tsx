@@ -19,8 +19,9 @@ import {
 import { Separator } from "../ui/separator";
 import PriceFormatter from "../common/PriceFormatter";
 import Container from "../common/Container";
-import CartSkeleton from "./CartSkeleton";
+
 import PageBreadcrumb from "../common/PageBreadcrumb";
+import CartSkeleton from "../skeletons/CartSkeleton";
 
 const CartPageClient = () => {
   const {
