@@ -1,4 +1,4 @@
-import ShopPageClient from "@/components/common/pages/shop/ShopPageClient";
+import ShopPageClient from "@/components/pages/shop/ShopPageClient";
 import { fetchData } from "@/lib/api";
 import React from "react";
 import { Brand, Category } from "../../../type";

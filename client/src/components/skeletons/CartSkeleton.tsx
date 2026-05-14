@@ -1,7 +1,6 @@
 import React from "react";
-import { Skeleton } from "../../../../components/ui/skeleton";
-import Container from "../../Container";
-
+import { Skeleton } from "../ui/skeleton";
+import Container from "../common/Container";
 
 const CartSkeleton = () => {
   return (

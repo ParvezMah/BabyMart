@@ -18,7 +18,7 @@ import { fetchData } from "@/lib/api";
 import { ChevronDown, ChevronUp, Loader2, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-import { Brand, Category, Product } from "../../../../../type";
+import { Brand, Category, Product } from "../../../../type";
 
 interface ProductsResponse {
   products: Product[];

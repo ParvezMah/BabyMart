@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Button } from "../../../../components/ui/button";
+import { Button } from "../ui/button";
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
 import Image from "next/image";
 import {
@@ -15,12 +15,12 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-} from "../../../../components/ui/alert-dialog";
-import { Separator } from "../../../../components/ui/separator";
-import PriceFormatter from "../../../common/PriceFormatter";
-import Container from "../../Container";
+} from "../ui/alert-dialog";
+import { Separator } from "../ui/separator";
+import PriceFormatter from "../common/PriceFormatter";
+import Container from "../common/Container";
 import CartSkeleton from "./CartSkeleton";
-import PageBreadcrumb from "../../PageBreadcrumb";
+import PageBreadcrumb from "../common/PageBreadcrumb";
 
 const CartPageClient = () => {
   const {

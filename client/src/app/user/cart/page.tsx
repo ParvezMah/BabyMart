@@ -1,5 +1,5 @@
 
-import CartPageClient from "@/components/common/pages/shop/CartPageClient";
+import CartPageClient from "@/components/pages/CartPageClient";
 import React from "react";
 
 const CartPage = () => {
