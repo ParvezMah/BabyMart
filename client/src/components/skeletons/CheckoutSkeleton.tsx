@@ -62,4 +62,4 @@ const CheckoutSkeleton = () => {
   );
 };
 
-export default CheckoutSkeleton;
+export default CheckoutSkeleton; 
