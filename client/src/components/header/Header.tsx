@@ -1,11 +1,12 @@
 import Container from "../common/Container";
 import Logo from "../common/Logo";
-import CartIcon from "../header/CartIcon";
-import OrdersIcon from "../header/OrdersIcon";
-import SearchInput from "../header/SearchInput";
-import TopHeader from "../header/TopHeader";
-import UserButton from "../header/UserButton";
-import WishlistIcon from "../header/WishListIcon";
+import CartIcon from "./CartIcon";
+import OrdersIcon from "./OrdersIcon";
+import SearchInput from "./SearchInput";
+import Sidebar from "./Sidebar";
+import TopHeader from "./TopHeader";
+import UserButton from "./UserButton";
+import WishlistIcon from "./WishListIcon";
 
 const Header = () => {
   return (
@@ -13,10 +14,12 @@ const Header = () => {
       <TopHeader />
       <Container className="flex items-center justify-between gap-10 py-4">
         <div className="flex flex-1 items-center justify-between md:justify-start md:gap-12">
-          {/* Sidebar */}
+          <Sidebar />
           <Logo />
           <div className="md:hidden flex items-center gap-3">
-            OrdersIcon WishlistIcon CartIcon
+            <OrdersIcon />
+            <WishlistIcon />
+            <CartIcon />
           </div>
           <SearchInput />
         </div>

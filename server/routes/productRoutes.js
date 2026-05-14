@@ -5,7 +5,7 @@ import { createProduct, deleteProduct, getProductById, getProducts, rateProduct,
 
 const router = express.Router();
 
-router.route("/").get(protect, admin, getProducts)
+router.route("/").get(getProducts)
 
 router.route("/").post(protect, admin, createProduct);
 
