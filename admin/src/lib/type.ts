@@ -58,6 +58,22 @@ export interface StatsData {
   roles: { name: string; value: number }[];
   categories: { name: string; value: number }[];
   brands: { name: string; value: number }[];
+    recentOrders: {
+    _id: string;
+    status: "pending" | "delivered" | "cancelled" | string;
+    totalPrice: number;
+    createdAt: string;
+    user?: {
+      name: string;
+    };
+  }[];
+
+  topProducts: {
+    _id: string;
+    name: string;
+    sold: number;
+    revenue: number;
+  }[];
 }
 
 export interface Invoice {

@@ -1,32 +1,32 @@
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { StatsCard } from "@/components/StatsCard";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAxiosPrivate } from "@/hooks/useAxiosPrivate";
 import type { StatsData } from "@/lib/type";
-import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { motion } from "framer-motion";
 import {
-  BarChart,
-  Bar,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-} from "recharts";
-import {
-  Users,
+  Bookmark,
+  DollarSign,
+  Package,
   ShoppingBag,
   Tag,
-  Bookmark,
-  Package,
-  DollarSign,
+  Users,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { motion } from "framer-motion";
-import { StatsCard } from "@/components/StatsCard";
+import { useEffect, useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { toast } from "sonner";
 
 const COLORS = [
   "hsl(217, 91%, 60%)", // Blue
@@ -54,6 +54,9 @@ const Dashboard = () => {
   const [stats, setStats] = useState<StatsData | null>(null);
   const [loading, setLoading] = useState(true);
   const axiosPrivate = useAxiosPrivate();
+
+  const recentOrdersCount = stats?.recentOrders?.length ?? 0;
+  const topProductsCount = stats?.topProducts?.length ?? 0;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -286,6 +289,127 @@ const Dashboard = () => {
                           </Bar>
                         </BarChart>
                       </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+                {/* Recent Orders */}
+                <motion.div variants={cardVariants}>
+                  <Card className="bg-white/95 shadow-lg rounded-xl hover:shadow-xl transition-shadow duration-300">
+                    <CardHeader>
+                      <CardTitle className="text-lg font-semibold text-gray-800">
+                        Recent Orders
+                      </CardTitle>
+                    </CardHeader>
+
+                    <CardContent>
+                      {stats.recentOrders && recentOrdersCount > 0 ? (
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm text-left">
+                            <thead>
+                              <tr className="border-b text-gray-600">
+                                <th className="py-2">Order ID</th>
+                                <th className="py-2">Customer</th>
+                                <th className="py-2">Status</th>
+                                <th className="py-2">Total</th>
+                                <th className="py-2">Date</th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              {stats.recentOrders.map((order) => (
+                                <tr key={order._id} className="border-b">
+                                  <td className="py-2 font-medium text-gray-700">
+                                    #{order._id.slice(-6)}
+                                  </td>
+
+                                  <td className="py-2 text-gray-600">
+                                    {order.user?.name || "Unknown"}
+                                  </td>
+
+                                  <td className="py-2">
+                                    <span
+                                      className={cn(
+                                        "px-2 py-1 rounded-full text-xs font-medium",
+                                        order.status === "delivered"
+                                          ? "bg-green-100 text-green-700"
+                                          : order.status === "pending"
+                                            ? "bg-yellow-100 text-yellow-700"
+                                            : order.status === "cancelled"
+                                              ? "bg-red-100 text-red-700"
+                                              : "bg-gray-100 text-gray-700",
+                                      )}
+                                    >
+                                      {order.status}
+                                    </span>
+                                  </td>
+
+                                  <td className="py-2 font-semibold text-gray-800">
+                                    ${order.totalPrice}
+                                  </td>
+
+                                  <td className="py-2 text-gray-500">
+                                    {new Date(
+                                      order.createdAt,
+                                    ).toLocaleDateString()}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <p className="text-gray-500 text-sm">
+                          No recent orders found
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                <motion.div variants={cardVariants}>
+                  <Card className="bg-white/95 shadow-lg rounded-xl hover:shadow-xl transition-shadow duration-300">
+                    <CardHeader>
+                      <CardTitle className="text-lg font-semibold text-gray-800">
+                        Top Products
+                      </CardTitle>
+                    </CardHeader>
+
+                    <CardContent>
+                      {stats.topProducts && stats?.topProducts?.length > 0 ? (
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm text-left">
+                            <thead>
+                              <tr className="border-b text-gray-600">
+                                <th className="py-2">Product</th>
+                                <th className="py-2">Sold</th>
+                                <th className="py-2">Revenue</th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              {stats.topProducts.slice(0, 5).map((p: any) => (
+                                <tr key={p._id} className="border-b">
+                                  <td className="py-2 font-medium text-gray-700">
+                                    {p.name}
+                                  </td>
+
+                                  <td className="py-2 text-gray-600">
+                                    {p.sold}
+                                  </td>
+
+                                  <td className="py-2 font-semibold text-indigo-600">
+                                    ${p.revenue}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <p className="text-gray-500 text-sm">
+                          No product data found
+                        </p>
+                      )}
                     </CardContent>
                   </Card>
                 </motion.div>
