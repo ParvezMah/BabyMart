@@ -398,7 +398,7 @@ const Account = () => {
           </p>
         </div>
 
-        <Badge className="capitalize">
+        <Badge className="capitalize px-2 py-1 rounded-full text-xs">
           {profile?.role}
         </Badge>
       </div>

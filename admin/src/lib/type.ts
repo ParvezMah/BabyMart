@@ -68,3 +68,53 @@ export interface Invoice {
   status: "paid" | "pending" | "cancelled";
   createdAt: string;
 };
+
+
+export interface OrderItem {
+  product: {
+    _id: string;
+    name: string;
+    price: number;
+    image?: string;
+  };
+  quantity: number;
+  price: number;
+}
+
+export interface OrderUser {
+  _id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
+export interface Order {
+  _id: string;
+
+  user: OrderUser;
+
+  items: OrderItem[];
+
+  totalAmount: number;
+
+  status:
+    | "pending"
+    | "processing"
+    | "shipped"
+    | "delivered"
+    | "cancelled";
+
+  paymentStatus: "paid" | "unpaid" | "refunded";
+
+  paymentMethod?: "cod" | "card" | "stripe" | "paypal";
+
+  shippingAddress?: {
+    address: string;
+    city: string;
+    country: string;
+    postalCode?: string;
+  };
+
+  createdAt: string;
+  updatedAt: string;
+}
