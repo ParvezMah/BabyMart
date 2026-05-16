@@ -1,6 +1,5 @@
 "use client";
 import Container from "@/components/common/Container";
-// import EmptyListDesign from "@/components/common/pages/product/EmptyListDesign";
 import ProductCard from "@/components/common/ProductCard";
 import ShopSkeleton from "@/components/skeletons/ShopSkeleton";
 import { Button } from "@/components/ui/button";
@@ -19,6 +18,7 @@ import { ChevronDown, ChevronUp, Loader2, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { Brand, Category, Product } from "../../../../type";
+import EmptyListDesign from "@/components/common/pages/product/EmptyListDesign";
 
 interface ProductsResponse {
   products: Product[];
@@ -499,11 +499,10 @@ const ShopPageClient = ({ categories, brands }: Props) => {
             </div>
           ) : (
             !loading && (
-            //   <EmptyListDesign
-            //     message="No products match to your selected filters."
-            //     resetFilters={resetAllFilters}
-            //   />
-                <h1>No products match your selected filters.</h1>
+              <EmptyListDesign
+                message="No products match to your selected filters."
+                resetFilters={resetAllFilters}
+              />
             )
           )}
         </div>
