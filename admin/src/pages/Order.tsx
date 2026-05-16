@@ -155,7 +155,7 @@ const Orders = () => {
               <TableHead>Status</TableHead>
               <TableHead>Items</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead>Action</TableHead>
+              {isAdmin && <TableHead className="text-right pr-[1%]">Actions</TableHead>}
             </TableRow>
           </TableHeader>
 

@@ -192,7 +192,7 @@ const InvoicePage = () => {
               <TableHead>Total</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="text-right pr-[1%]">Actions</TableHead>
             </TableRow>
           </TableHeader>
 

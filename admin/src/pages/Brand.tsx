@@ -185,7 +185,7 @@ const Brands = () => {
                 <TableHead>Image</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Created At</TableHead>
-                {isAdmin && <TableHead>Actions</TableHead>}
+                {isAdmin && <TableHead className="text-right pr-[1%]">Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>

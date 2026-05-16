@@ -379,7 +379,7 @@ const Products = () => {
                     <TableHead className="font-semibold">Category</TableHead>
                     <TableHead className="font-semibold">Brand</TableHead>
                     {isAdmin && (
-                      <TableHead className="text-right font-semibold min-w-[100px]">
+                      <TableHead className="text-right pr-[1%]">
                         Actions
                       </TableHead>
                     )}

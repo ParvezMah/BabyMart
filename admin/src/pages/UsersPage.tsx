@@ -1,7 +1,16 @@
 import type { User } from "@/lib/type";
 import { useEffect, useState } from "react";
 import useAuthStore from "@/store/useAuthStore";
-import { Edit, Trash, Plus, Users, Search, Eye, RefreshCw, EyeOff } from "lucide-react";
+import {
+  Edit,
+  Trash,
+  Plus,
+  Users,
+  Search,
+  Eye,
+  RefreshCw,
+  EyeOff,
+} from "lucide-react";
 import { useAxiosPrivate } from "@/hooks/useAxiosPrivate";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -302,7 +311,9 @@ const UsersPage = () => {
               <TableHead className="font-semibold">Email</TableHead>
               <TableHead className="font-semibold">Role</TableHead>
               <TableHead className="font-semibold">Created At</TableHead>
-              <TableHead className="font-semibold">Actions</TableHead>
+              {isAdmin && (
+                <TableHead className="text-right pr-[2%]">Actions</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -336,12 +347,13 @@ const UsersPage = () => {
                   <TableCell>
                     {new Date(user.createdAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell className="text-right">
                     <div className="flex items-center gap-2">
                       <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => handleView(user)}
+                        className="text-blue-600 hover:text-blue-700"
                         title="View user details"
                       >
                         <Eye className="h-4 w-4" />
@@ -352,6 +364,7 @@ const UsersPage = () => {
                             variant="ghost"
                             size="icon"
                             onClick={() => handleEdit(user)}
+                            className="text-green-600 hover:text-green-700"
                             title="Edit user"
                           >
                             <Edit className="h-4 w-4" />
@@ -368,7 +381,38 @@ const UsersPage = () => {
                         </>
                       )}
                     </div>
-                  </TableCell>
+                  </TableCell> */}
+                  {isAdmin && (
+                    <TableCell className="text-right ">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleView(user)}
+                        className="text-blue-600 hover:text-blue-700"
+                        title="View user details"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(user)}
+                        className="text-green-600 hover:text-green-700"
+                        title="Edit user"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDelete(user)}
+                        className="text-red-600 hover:text-red-700"
+                        title="Delete user"
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             ) : (
@@ -635,9 +679,15 @@ const UsersPage = () => {
                           type="button"
                           onClick={() => setShowPassword((prev) => !prev)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
-                          title={showPassword ? "Hide password" : "Show password"}
+                          title={
+                            showPassword ? "Hide password" : "Show password"
+                          }
                         >
-                          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                          {showPassword ? (
+                            <EyeOff size={18} />
+                          ) : (
+                            <Eye size={18} />
+                          )}
                         </button>
                       </div>
                     </FormControl>
@@ -798,7 +848,7 @@ const UsersPage = () => {
                   <Badge
                     className={cn(
                       "capitalize mt-2",
-                      getRoleColor(selectedUser.role)
+                      getRoleColor(selectedUser.role),
                     )}
                   >
                     {selectedUser.role}

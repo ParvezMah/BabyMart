@@ -70,7 +70,7 @@ const Categories = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
+    null,
   );
   const [formLoading, setFormLoading] = useState(false);
 
@@ -288,7 +288,9 @@ const Categories = () => {
                   <TableHead>Type</TableHead>
                   <TableHead>Created At</TableHead>
                   {isAdmin && (
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="text-right pr-[1%]">
+                      Actions
+                    </TableHead>
                   )}
                 </TableRow>
               </TableHeader>
@@ -306,7 +308,7 @@ const Categories = () => {
                         </div>
                       ) : (
                         <div className="h-12 w-12 rounded bg-muted flex items-center justify-center text-center text-muted-foreground">
-                          No <br/> Image
+                          No <br /> Image
                         </div>
                       )}
                     </TableCell>
@@ -323,6 +325,8 @@ const Categories = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleEdit(category)}
+                          className="text-green-600 hover:text-green-700"
+                          title="Edit Category"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -330,6 +334,8 @@ const Categories = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleDelete(category)}
+                          className="text-red-600 hover:text-red-700"
+                          title="Delete Category"
                         >
                           <Trash className="h-4 w-4" />
                         </Button>

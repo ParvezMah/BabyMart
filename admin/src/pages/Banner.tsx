@@ -225,7 +225,7 @@ export default function BannersPage() {
                 <TableHead>Start From</TableHead>
                 <TableHead>Type</TableHead>
                 {isAdmin && (
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-right pr-[1%]">Actions</TableHead>
                 )}
               </TableRow>
             </TableHeader>
