@@ -59,3 +59,12 @@ export interface StatsData {
   categories: { name: string; value: number }[];
   brands: { name: string; value: number }[];
 }
+
+export interface Invoice {
+  _id: string;
+  invoiceNumber: string;
+  customerName: string;
+  totalAmount: number;
+  status: "paid" | "pending" | "cancelled";
+  createdAt: string;
+};

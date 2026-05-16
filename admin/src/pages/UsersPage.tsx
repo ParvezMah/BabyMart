@@ -1,7 +1,7 @@
 import type { User } from "@/lib/type";
 import { useEffect, useState } from "react";
 import useAuthStore from "@/store/useAuthStore";
-import { Edit, Trash, Plus, Users, Search, Eye, RefreshCw } from "lucide-react";
+import { Edit, Trash, Plus, Users, Search, Eye, RefreshCw, EyeOff } from "lucide-react";
 import { useAxiosPrivate } from "@/hooks/useAxiosPrivate";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -72,6 +72,7 @@ const UsersPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [total, setTotal] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
   // const [page, setPage] = useState(1);
   // const [perPage] = useState(20);
   // const [totalPages, setTotalPages] = useState(1);
@@ -619,15 +620,28 @@ const UsersPage = () => {
                     <FormLabel className="text-gray-700 font-medium">
                       Password (leave empty to keep current)
                     </FormLabel>
+
                     <FormControl>
-                      <Input
-                        type="password"
-                        {...field}
-                        placeholder="Leave empty to keep current password"
-                        disabled={formLoading}
-                        className="border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                      />
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          {...field}
+                          placeholder="Leave empty to keep current password"
+                          disabled={formLoading}
+                          className="border-gray-300 rounded-lg pr-10 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                        />
+
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((prev) => !prev)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
+                          title={showPassword ? "Hide password" : "Show password"}
+                        >
+                          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
                     </FormControl>
+
                     <FormMessage className="text-red-500 text-xs" />
                   </FormItem>
                 )}
