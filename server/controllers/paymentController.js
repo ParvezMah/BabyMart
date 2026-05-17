@@ -35,6 +35,9 @@ export const createPaymentIntent = asyncHandler(async (req, res) => {
 
     const { orderId, amount, currency = "usd" } = req.body;
 
+    // ===============================
+    // 1. VALIDATION
+    // ===============================
     if (!orderId || !amount) {
       return res.status(400).json({
         success: false,
@@ -42,6 +45,17 @@ export const createPaymentIntent = asyncHandler(async (req, res) => {
       });
     }
 
+
+    if (amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid amount",
+      });
+    }
+
+    // ===============================
+    // 2. FIND ORDER
+    // ===============================
     const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({
@@ -50,6 +64,9 @@ export const createPaymentIntent = asyncHandler(async (req, res) => {
       });
     }
 
+    // ===============================
+    // 3. AUTHORIZATION CHECK
+    // ===============================
     if (!order.userId.equals(req.user._id)) {
       return res.status(403).json({
         success: false,
@@ -57,6 +74,9 @@ export const createPaymentIntent = asyncHandler(async (req, res) => {
       });
     }
 
+    // ===============================
+    // 4. CHECK IF ALREADY PAID
+    // ===============================
     if (order.status === "paid" || order.isPaid) {
       return res.status(400).json({
         success: false,
@@ -64,8 +84,14 @@ export const createPaymentIntent = asyncHandler(async (req, res) => {
       });
     }
 
-    const amountInCents = Math.round(amount * 100);
+    // ===============================
+    // 5. CALCULATE AMOUNT SAFELY
+    // ===============================
+    const amountInCents = Math.round(Number(amount) * 100);
 
+    // ===============================
+    // 6. CREATE STRIPE PAYMENT INTENT
+    // ===============================
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amountInCents,
       currency: currency.toLowerCase(),
@@ -76,14 +102,20 @@ export const createPaymentIntent = asyncHandler(async (req, res) => {
       },
       payment_method_types: ["card"],
       description: `Payment for Baby Shop Order #${orderId
+        .toString()
         .slice(-8)
         .toUpperCase()}`,
     });
 
+    // ===============================
+    // 7. RESPONSE
+    // ===============================
     res.status(200).json({
       success: true,
       clientSecret: paymentIntent.client_secret,
       paymentIntentId: paymentIntent.id,
+      amount: amountInCents,
+      currency: currency.toLowerCase(),
       message: "Payment intent created successfully",
     });
   } catch (error) {

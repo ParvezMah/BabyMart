@@ -1,20 +1,23 @@
 "use client";
 
-import { getOrderById, Order } from "@/lib/orderApi";
+import { createOrderFromCart, getOrderById, Order } from "@/lib/orderApi";
 import { useCartStore, useUserStore } from "@/lib/store";
+import {
+  StripeCheckoutItem
+} from "@/lib/stripe";
 import { AlertCircle, CheckCircle, CreditCard, Lock } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Address } from "../../../type";
 import Container from "../common/Container";
 import PageBreadcrumb from "../common/PageBreadcrumb";
 import PriceFormatter from "../common/PriceFormatter";
+import CheckoutSkeleton from "../skeletons/CheckoutSkeleton";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import AddressSelection from "./AddressSelection";
-import { Address } from "../../../type";
-import CheckoutSkeleton from "../skeletons/CheckoutSkeleton";
 
 const CheckoutPageClient = () => {
   const [order, setOrder] = useState<Order | null>(null);
@@ -190,7 +193,82 @@ const CheckoutPageClient = () => {
   };
 
   //   handle stripe checkout fucntion
-  const handleStripeCheckout = async () => {};
+  const handleStripeCheckout = async () => {
+    if (!order) return;
+    if (!selectedAddress) {
+      toast.error("Please select a shipping address");
+      return;
+    }
+    setProcessing(true);
+    try {
+      let finalOrder = order;
+      // If this is a temporary order (from cart), create it first
+      if (order?._id === "temp") {
+        setIsCreatingOrder(true);
+        const orderItems = cartItemsWithQuantities.map((item) => ({
+          _id: item.product._id,
+          name: item.product.name,
+          price: item.product.price,
+          quantity: item.quantity,
+          image: item.product.image,
+        }));
+        const response = await createOrderFromCart(
+          auth_token!,
+          orderItems,
+          selectedAddress!
+        );
+
+        if (!response?.success || !response.order) {
+          throw new Error(response.message || "Failed to create order");
+        }
+        finalOrder = response.order;
+        setOrder(finalOrder);
+
+        // Clear cart after successful order creation
+        // await clearCart();
+        setIsCreatingOrder(false);
+      }
+      // Stripe payment
+      // Convert order items to Stripe format
+      const stripeItems: StripeCheckoutItem[] = finalOrder?.items?.map(
+        (item) => ({
+          name: item.name,
+          description: `Quantity: ${item.quantity}`,
+          amount: Math.round(item.price * 100), // Convert to cents
+          currency: "usd",
+          quantity: item.quantity,
+          images: item.image ? [item.image] : undefined,
+        })
+      );
+      // Create checkout session
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: stripeItems,
+          customerEmail: authUser?.email || "",
+          successUrl: `${window.location.origin}/success?orderId=${finalOrder._id}&session_id={CHECKOUT_SESSION_ID}`,
+          cancelUrl: `${window.location.origin}/user/checkout?orderId=${finalOrder._id}`,
+          metadata: {
+            orderId: finalOrder._id,
+            shippingAddress: JSON.stringify(selectedAddress),
+          },
+        }),
+      });
+
+      const { url } = await response.json();
+      if (url) {
+        // Redirect to Stripe Checkout using the session URL
+        window.location.href = url;
+      }
+    } catch (error) {
+      console.log("Stripe payment error", error);
+    } finally {
+      setProcessing(false);
+    }
+  };
 
   if (loading || authLoading) {
     return <CheckoutSkeleton />;

@@ -18,6 +18,7 @@ import wishlistRoutes from "./routes/wishlistRoutes.js"
 import cartRoutes from "./routes/cartRoutes.js"
 import analyticsRoutes from "./routes/analyticsRoutes.js"
 import paymentRoutes from "./routes/paymentRoutes.js"
+import invoiceRoutes from "./routes/invoiceRoutes.js"
 
 
 import swaggerUi from "swagger-ui-express";
@@ -90,6 +91,7 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/invoices", invoiceRoutes);
 
 
 // API Documentation
