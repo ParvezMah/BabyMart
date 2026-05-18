@@ -513,8 +513,19 @@ export const useOrderStore = create<OrderState>()(
     (set, get) => ({
       orders: [],
       isLoading: false,
-      addOrder: (order) =>
-        set((state) => ({ orders: [...state.orders, order] })),
+      // addOrder: (order) =>
+      //   set((state) => ({ orders: [...state.orders, order] })),
+      addOrder: (order) => 
+        set((state)=>{
+          const exists = state.orders.some((o) => o._id === order._id);
+          if(exists){
+            return state;
+          }
+
+          return {
+            orders : [...state.orders, order]
+          }
+        }),
       updateOrder: (order) =>
         set((state) => ({
           orders: state.orders.map((o) => (o._id === order._id ? order : o)),

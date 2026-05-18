@@ -1,7 +1,7 @@
 "use client";
 
 import { createOrderFromCart, getOrderById, Order } from "@/lib/orderApi";
-import { useCartStore, useUserStore } from "@/lib/store";
+import { useCartStore, useUserStore, useOrderStore } from "@/lib/store";
 import {
   StripeCheckoutItem
 } from "@/lib/stripe";
@@ -31,6 +31,7 @@ const CheckoutPageClient = () => {
   const router = useRouter();
   const { auth_token, authUser, isAuthenticated, verifyAuth } = useUserStore();
   const { cartItemsWithQuantities, clearCart } = useCartStore();
+  const { addOrder, getOrdersCount } = useOrderStore();
 
   const orderId = searchParams.get("orderId");
 
@@ -223,9 +224,11 @@ const CheckoutPageClient = () => {
         }
         finalOrder = response.order;
         setOrder(finalOrder);
+        // Add order to global store
+        addOrder(finalOrder);
 
         // Clear cart after successful order creation
-        // await clearCart();
+        await clearCart();
         setIsCreatingOrder(false);
       }
       // Stripe payment
@@ -273,6 +276,8 @@ const CheckoutPageClient = () => {
   if (loading || authLoading) {
     return <CheckoutSkeleton />;
   }
+
+  console.log("Order Count : ", getOrdersCount());
 
   if (!order) {
     return (
