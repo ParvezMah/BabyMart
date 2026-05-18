@@ -7,7 +7,7 @@ import {
   deleteOrder,
   getAllOrdersAdmin,
 } from "../controllers/orderController.js";
-import { protect } from "../middleware/authMiddleware.js";
+import { admin, protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -33,7 +33,7 @@ const router = express.Router();
  *       403:
  *         description: Admin access required
  */
-router.route("/admin").get(protect, getAllOrdersAdmin);
+router.route("/admin").get(protect, admin, getAllOrdersAdmin);
 
 /**
  * @swagger

@@ -32,7 +32,6 @@ import {
 
 import type { Order } from "@/lib/type";
 import { cn } from "@/lib/utils";
-import { set } from "zod";
 
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -49,9 +48,9 @@ const Orders = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await axiosPrivate.get("/orders");
-      setOrders(res.data.orders || []);
-      setTotal(res?.data?.orders.length || 0);
+      const res = await axiosPrivate.get("/orders/admin");
+      setOrders(res.data?.orders || []);
+      setTotal(res?.data?.orders?.length || 0);
     } catch (error) {
       console.log("Failed to fetch orders", error);
       toast.error("Failed to load orders");
@@ -67,9 +66,9 @@ const Orders = () => {
   const handleRefresh = async () => {
     setRefreshing(true);
     try {
-      const res = await axiosPrivate.get("/orders");
-      setOrders(res.data.orders || []);
-      setTotal(res?.data?.orders.length || 0);
+      const res = await axiosPrivate.get("/orders/admin");
+      setOrders(res.data?.orders || []);
+      setTotal(res?.data?.orders?.length || 0);
       toast.success("Orders refreshed");
     } catch (error) {
       toast.error("Failed to refresh orders");
@@ -113,6 +112,7 @@ const Orders = () => {
       </div>
     );
   }
+
 
   return (
     <div className="p-5 space-y-6">

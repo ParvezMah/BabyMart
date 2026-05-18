@@ -7,7 +7,7 @@ import Cart from "../models/cartModel.js";
 // @access  Private
 const getOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ userId: req.user._id }).populate(
-    "items.productId"
+    "items.productId",
   );
   res.json(orders);
 });
@@ -52,7 +52,7 @@ const createOrderFromCart = asyncHandler(async (req, res) => {
   ) {
     res.status(400);
     throw new Error(
-      "Shipping address is required with all fields (street, city, country, postalCode)"
+      "Shipping address is required with all fields (street, city, country, postalCode)",
     );
   }
 
@@ -110,7 +110,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   if (!status || !validStatuses.includes(status)) {
     res.status(400);
     throw new Error(
-      "Invalid status. Must be one of: pending, paid, completed, cancelled"
+      "Invalid status. Must be one of: pending, paid, completed, cancelled",
     );
   }
 
@@ -136,7 +136,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
       throw new Error(
         isPending
           ? "Not authorized to update this order"
-          : "Order status can only be updated by admin after payment"
+          : "Order status can only be updated by admin after payment",
       );
     }
   }
@@ -165,7 +165,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
     {
       new: true,
       runValidators: false, // Disable validation to avoid shipping address issues
-    }
+    },
   );
 
   res.json({
@@ -251,11 +251,17 @@ const getAllOrdersAdmin = asyncHandler(async (req, res) => {
   const transformedOrders = orders.map((order) => ({
     _id: order._id,
     orderId: `ORD-${order._id.toString().slice(-6).toUpperCase()}`,
-    user: {
-      _id: order.userId._id,
-      name: order.userId.name,
-      email: order.userId.email,
-    },
+    user: order.userId
+      ? {
+          _id: order.userId._id,
+          name: order.userId.name,
+          email: order.userId.email,
+        }
+      : {
+          _id: null,
+          name: "Unknown",
+          email: "N/A",
+        },
     items: order.items.map((item) => ({
       product: {
         _id: item.productId._id,
@@ -272,8 +278,8 @@ const getAllOrdersAdmin = asyncHandler(async (req, res) => {
       order.status === "paid" || order.status === "completed"
         ? "paid"
         : order.status === "cancelled"
-        ? "failed"
-        : "pending",
+          ? "failed"
+          : "pending",
     shippingAddress: order.shippingAddress || {
       street: "N/A",
       city: "N/A",
@@ -294,10 +300,10 @@ const getAllOrdersAdmin = asyncHandler(async (req, res) => {
 });
 
 export {
-    getOrders,
-    getOrderById,
-    createOrderFromCart,
-    updateOrderStatus,
-    deleteOrder,
-    getAllOrdersAdmin,
-}
+  getOrders,
+  getOrderById,
+  createOrderFromCart,
+  updateOrderStatus,
+  deleteOrder,
+  getAllOrdersAdmin,
+};
