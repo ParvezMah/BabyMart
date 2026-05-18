@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Package, Loader2, Eye } from "lucide-react";
+import { Package, Loader2, Eye, Trash2 } from "lucide-react";
 
 import Container from "../common/Container";
 import PriceFormatter from "../common/PriceFormatter";
@@ -35,6 +35,8 @@ const OrderPageClient = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isCancelMode, setIsCancelMode] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
 
   // Redirect if not logged in
   useEffect(() => {
@@ -43,29 +45,65 @@ const OrderPageClient = () => {
     }
   }, [isAuthenticated, router]);
 
+  const fetchOrders = useCallback(async () => {
+    if (!auth_token) return;
 
+    setLoading(true);
 
-const fetchOrders = useCallback(async () => {
-  if (!auth_token) return;
+    try {
+      const res = await authApi.get("/orders");
 
-  setLoading(true);
+      setOrders(res.data || []);
+    } catch (error) {
+      console.error("Failed to fetch orders:", error);
+      toast.error("Failed to load orders");
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [auth_token]);
 
-  try {
-    const res = await authApi.get("/orders");
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
-    setOrders(res.data || []);
-  } catch (error) {
-    console.error("Failed to fetch orders:", error);
-    toast.error("Failed to load orders");
-    setOrders([]);
-  } finally {
-    setLoading(false);
-  }
-}, [auth_token]);
+  // =========================
+  // 🧠 CANCEL ORDER LOGIC
+  // =========================
+  const handleOrderCancel = async (orderId: string) => {
+    try {
+      setCancelling(true);
 
-useEffect(() => {
-  fetchOrders();
-}, [fetchOrders]);
+      await authApi.put(`/orders/${orderId}/cancel`, {
+        reason: "Cancelled by user",
+      });
+
+      toast.success("Order cancelled successfully");
+
+      // update orders list
+      setOrders((prev) =>
+        prev.map((order) =>
+          order._id === orderId ? { ...order, status: "cancelled" } : order,
+        ),
+      );
+
+      // close modal properly
+      setSelectedOrder(null);
+      setIsCancelMode(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to cancel order");
+    } finally {
+      setCancelling(false);
+    }
+  };
+
+  // =========================
+  // 🧠 CAN CANCEL RULES
+  // =========================
+  const canCancelOrder = (status: Order["status"]) => {
+    return status === "pending" || status === "paid";
+  };
 
   const getStatusColor = (status: Order["status"]) => {
     switch (status) {
@@ -93,12 +131,8 @@ useEffect(() => {
       <Container className="py-16 text-center">
         <Package className="mx-auto w-16 h-16 text-gray-300 mb-4" />
         <h1 className="text-2xl font-bold mb-2">No Orders Found</h1>
-        <p className="text-gray-500 mb-6">
-          You haven’t placed any orders yet.
-        </p>
-        <Button onClick={() => router.push("/shop")}>
-          Start Shopping
-        </Button>
+        <p className="text-gray-500 mb-6">You haven’t placed any orders yet.</p>
+        <Button onClick={() => router.push("/shop")}>Start Shopping</Button>
       </Container>
     );
   }
@@ -116,9 +150,7 @@ useEffect(() => {
             {/* Top row */}
             <div className="flex justify-between items-center mb-3">
               <div>
-                <p className="text-sm text-gray-500">
-                  Order ID: {order._id}
-                </p>
+                <p className="text-sm text-gray-500">Order ID: {order._id}</p>
                 <p className="text-sm text-gray-500">
                   {new Date(order.createdAt).toLocaleDateString()}
                 </p>
@@ -126,7 +158,7 @@ useEffect(() => {
 
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                  order.status
+                  order.status,
                 )}`}
               >
                 {order.status.toUpperCase()}
@@ -157,14 +189,28 @@ useEffect(() => {
                 className="text-lg font-semibold"
               />
 
-              <Button
-                size="sm"
-                onClick={() => setSelectedOrder(order)}
-                className="flex items-center gap-2"
-              >
-                <Eye className="w-4 h-4" />
-                View
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => setSelectedOrder(order)}
+                  className="flex items-center gap-2"
+                >
+                  <Eye className="w-4 h-4" />
+                  View
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setSelectedOrder(order);
+                    setIsCancelMode(true);
+                  }}
+                  disabled={order.status === "cancelled" || order.status === "shipped"}
+                  className="flex bg-red-400 hover:bg-red-500 items-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Cancel
+                </Button>
+              </div>
             </div>
           </div>
         ))}
@@ -182,7 +228,7 @@ useEffect(() => {
 
             <span
               className={`px-3 py-1 rounded-full text-xs ${getStatusColor(
-                selectedOrder.status
+                selectedOrder.status,
               )}`}
             >
               {selectedOrder.status.toUpperCase()}
@@ -216,6 +262,92 @@ useEffect(() => {
             >
               Close
             </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Simple Order Modal */}
+      {selectedOrder && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-lg rounded-xl p-6">
+            <h2 className="text-xl font-bold mb-2">
+              {isCancelMode ? "Cancel Order" : "Order Details"}
+            </h2>
+
+            <p className="text-sm text-gray-500 mb-2">
+              ID: {selectedOrder._id}
+            </p>
+
+            <span
+              className={`px-3 py-1 rounded-full text-xs ${getStatusColor(
+                selectedOrder.status,
+              )}`}
+            >
+              {selectedOrder.status.toUpperCase()}
+            </span>
+
+            <Separator className="my-4" />
+
+            {/* ITEMS */}
+            <div className="space-y-2">
+              {selectedOrder.items.map((item, i) => (
+                <div key={i} className="flex justify-between text-sm">
+                  <span>
+                    {item.name} × {item.quantity}
+                  </span>
+                  <span>
+                    <PriceFormatter amount={item.price * item.quantity} />
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <Separator className="my-4" />
+
+            {/* TOTAL */}
+            <div className="flex justify-between font-bold">
+              <span>Total</span>
+              <PriceFormatter amount={selectedOrder.total} />
+            </div>
+
+            {/* =========================
+          CANCEL MODE UI
+      ========================= */}
+            {isCancelMode ? (
+              <div className="mt-5 space-y-3">
+                <p className="text-sm text-red-500">
+                  Are you sure you want to cancel this order?
+                </p>
+
+                <Button
+                  className="w-full bg-red-500 hover:bg-red-600"
+                  onClick={() => handleOrderCancel(selectedOrder._id)}
+                  disabled={cancelling}
+                >
+                  {cancelling && <Loader2 className="animate-spin w-4 h-4 mr-2" />}
+                  {cancelling ?  "Cancelling..." : "Cancel Order"}
+
+                </Button>
+
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => {
+                    setIsCancelMode(false);
+                    setSelectedOrder(null);
+                  }}
+                >
+                  No, Keep Order
+                </Button>
+              </div>
+            ) : (
+              <Button
+                className="w-full mt-5"
+                onClick={() => setSelectedOrder(null)}
+              >
+                Close
+              </Button>
+            )}
           </div>
         </div>
       )}

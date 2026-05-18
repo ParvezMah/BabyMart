@@ -74,6 +74,17 @@ const orderSchema = new mongoose.Schema(
         paidAt: {
             type: Date,
         },
+        isDeleted: {
+            type: Boolean,
+            default: false,
+        },
+        cancelledAt: {
+            type: Date,
+        },
+        cancelReason: {
+            type: String,
+            default: null,
+        },
     },
     {
         timestamps: true,

@@ -299,6 +299,46 @@ const getAllOrdersAdmin = asyncHandler(async (req, res) => {
   });
 });
 
+const cancelOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+
+  // Only owner can cancel
+  const isOwner = order.userId.toString() === req.user._id.toString();
+
+  if (!isOwner) {
+    res.status(403);
+    throw new Error("Not authorized to cancel this order");
+  }
+
+  // Business rules
+  if (["shipped", "delivered"].includes(order.status)) {
+    res.status(400);
+    throw new Error("Cannot cancel shipped or delivered orders");
+  }
+
+  if (order.status === "cancelled") {
+    res.status(400);
+    throw new Error("Order is already cancelled");
+  }
+
+  order.status = "cancelled";
+  order.cancelledAt = new Date();
+  order.cancelReason = req.body.reason || "No reason provided";
+
+  await order.save();
+
+  res.json({
+    success: true,
+    message: "Order cancelled successfully",
+    order,
+  });
+});
+
 export {
   getOrders,
   getOrderById,
@@ -306,4 +346,5 @@ export {
   updateOrderStatus,
   deleteOrder,
   getAllOrdersAdmin,
+  cancelOrder,
 };

@@ -6,6 +6,7 @@ import {
   updateOrderStatus,
   deleteOrder,
   getAllOrdersAdmin,
+  cancelOrder,
 } from "../controllers/orderController.js";
 import { admin, protect } from "../middleware/authMiddleware.js";
 
@@ -222,5 +223,9 @@ router.route("/:id/status").put(protect, updateOrderStatus);
  *         description: Order not found
  */
 router.route("/:id/webhook-status").put(updateOrderStatus);
+
+// User can cancel order after confirm a order
+router.route("/:id/cancel").put(protect, cancelOrder);
+
 
 export default router;
