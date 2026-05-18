@@ -16,11 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import {
-  Eye,
-  RefreshCw,
-  ShoppingBag
-} from "lucide-react";
+import { Eye, RefreshCw, ShoppingBag, Trash2 } from "lucide-react";
 
 import {
   Dialog,
@@ -32,11 +28,22 @@ import {
 
 import type { Order } from "@/lib/type";
 import { cn } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isViewOpen, setIsViewOpen] = useState(false);
@@ -82,6 +89,31 @@ const Orders = () => {
     setIsViewOpen(true);
   };
 
+  // =========================
+  // 🧠 DELETE ORDER LOGIC
+  // =========================
+  const handleDeleteOrder = async (orderId: string) => {
+    try {
+      await axiosPrivate.delete(`/orders/${orderId}`);
+
+      toast.success("Order deleted successfully");
+
+      // remove from UI instantly
+      setOrders((prev) => prev.filter((order) => order._id !== orderId));
+
+      setTotal((prev) => prev - 1);
+
+      // close modal if open
+      if (selectedOrder?._id === orderId) {
+        setIsViewOpen(false);
+        setSelectedOrder(null);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete order");
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "pending":
@@ -113,15 +145,17 @@ const Orders = () => {
     );
   }
 
-
   return (
     <div className="p-5 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Orders Management</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Orders Management
+          </h1>
           <p className="text-gray-600 mt-0.5">
-            View and manage all system orders in one place. Search, filter, and export as needed.
+            View and manage all system orders in one place. Search, filter, and
+            export as needed.
           </p>
         </div>
         <div className="flex items-center gap-4">
@@ -155,7 +189,9 @@ const Orders = () => {
               <TableHead>Status</TableHead>
               <TableHead>Items</TableHead>
               <TableHead>Date</TableHead>
-              {isAdmin && <TableHead className="text-right pr-[1%]">Actions</TableHead>}
+              {isAdmin && (
+                <TableHead className="text-right pr-[1%]">Actions</TableHead>
+              )}
             </TableRow>
           </TableHeader>
 
@@ -167,9 +203,7 @@ const Orders = () => {
                     #{order._id.slice(-6)}
                   </TableCell>
 
-                  <TableCell>
-                    {order.user?.name || "Unknown"}
-                  </TableCell>
+                  <TableCell>{order.user?.name || "Unknown"}</TableCell>
 
                   <TableCell className="font-semibold text-green-600">
                     ${order.totalAmount.toFixed(2)}
@@ -187,21 +221,29 @@ const Orders = () => {
                     </Badge>
                   </TableCell>
 
-                  <TableCell>
-                    {order.items.length} items
-                  </TableCell>
+                  <TableCell>{order.items.length} items</TableCell>
 
                   <TableCell>
                     {new Date(order.createdAt).toLocaleDateString()}
                   </TableCell>
 
-                  <TableCell>
+                  <TableCell className="text-right pr-[1%]">
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => handleView(order)}
                     >
                       <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        setSelectedOrder(order);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -222,9 +264,7 @@ const Orders = () => {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Order Details</DialogTitle>
-            <DialogDescription>
-              Full order information
-            </DialogDescription>
+            <DialogDescription>Full order information</DialogDescription>
           </DialogHeader>
 
           {selectedOrder && (
@@ -255,7 +295,9 @@ const Orders = () => {
 
               <div>
                 <p className="font-semibold">Payment</p>
-                <Badge className={cn(getPaymentBadge(selectedOrder.paymentStatus))}>
+                <Badge
+                  className={cn(getPaymentBadge(selectedOrder.paymentStatus))}
+                >
                   {selectedOrder.paymentStatus}
                 </Badge>
               </div>
@@ -274,6 +316,29 @@ const Orders = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Delete Order Confirmation */}
+      <AlertDialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              order{" "}
+              <span className="font-semibold">{selectedOrder?._id}</span>.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteOrder.bind(null, selectedOrder?._id || "")}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
